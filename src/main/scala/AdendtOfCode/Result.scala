@@ -11,11 +11,13 @@ object Result extends App  {
   //Day2
   var inputDay2: List[String] = Inputs.read("ressources/input/Day2.txt")
   //println("Day2 answer :" +Day2.handler(inputDay2))
+  //println("Day2 bonus  answer :" +Day2.handlerBonus(inputDay2))
 
   //Day3
   var testDay3 = List("00100","11110","10110","10111","10101","01111","00111","11100","10000","11001","00010","01010")
   var inputDay3: List[String] = Inputs.read("ressources/input/Day3.txt")
-  print("Day3 answer :" +Day3.compute(inputDay3))
+  //print("Day3 answer :" +Day3.compute(inputDay3))
+  println("Day3 answer bonus :"+Day3.computeBonus(inputDay3))
 
 
 }
