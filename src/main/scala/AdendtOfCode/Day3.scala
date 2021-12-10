@@ -27,6 +27,52 @@ object Day3 {
 
 
   }
+  def getStrongBitOxy(input: List[Int],n:Int) :Boolean= {
+     if (input.count(x => {(x & n) == n}) >= input.count(x => {(x & n) != n}) )
+       true
+     else
+       false
+
+  }
+  def getStrongBitCO2(input: List[Int],n:Int) :Boolean= {
+    if (input.count(x => {(x & n) == n}) >= input.count(x => {(x & n) != n}) )
+      false
+    else
+      true
+
+  }
+
+  def getOxygen(input: List[Int],n:Int):Int ={
+
+    if(input.tail.isEmpty)
+      input.head
+    else
+      if(getStrongBitOxy(input,n))
+        getOxygen(input.filter(x => {(x & n) == n}),n>>1)
+      else
+        getOxygen(input.filter(x => {(x & n) != n}),n>>1)
+
+  }
+
+
+  def getCO2(input: List[Int],n:Int):Int ={
+    if(input.tail.isEmpty)
+      input.head
+    else
+      if(getStrongBitCO2(input,n))
+        getCO2(input.filter(x => {(x & n) == n}),n>>1)
+      else
+        getCO2(input.filter(x => {(x & n) != n}),n>>1)
+  }
+
+
+  def computeBonus(input: List[String]) ={
+    val n = input.head.length -1
+
+    getCO2(input.map(Integer.parseInt(_,2)),1<<n) *getOxygen(input.map(Integer.parseInt(_,2)),1<<n)
+
+
+  }
 
 
 }
