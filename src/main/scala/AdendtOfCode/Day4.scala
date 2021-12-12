@@ -1,13 +1,24 @@
 package AdendtOfCode
 
+import scala.annotation.tailrec
+import scala.math.Ordering.Implicits.infixOrderingOps
+
 object Day4 {
 
   case class BingoGrid(rows : List[List[Int]]){
 
 
     def getSum: Int = rows.flatMap(_.filter(_>0)).sum
-    def isWinning : Boolean = {
+    def isWinningRow :Boolean = {
       rows.map( x => {if(x.sum == -5) true else false}).max
+
+    }
+    def isWinningColumn :Boolean = {
+      rows.indices.map(x => { if(rows.map(_(x)).sum == -5) true else false  }).max
+
+    }
+    def isWinning : Boolean = {
+      isWinningRow max isWinningColumn
 
     }
 
@@ -33,7 +44,7 @@ object Day4 {
   def findWinningGrid(bingoGrids :List[BingoGrid],tirage:List[Int]): (BingoGrid,Int) ={
 
     if (bingoGrids.map(checkValue(_,tirage.head)).exists(_.isWinning)) {
-      println(bingoGrids.map(checkValue(_,tirage.head)).filter(_.isWinning).head.getSum)
+
       (bingoGrids.map(checkValue(_,tirage.head)).filter(_.isWinning).head,tirage.head)
     } else
       findWinningGrid(bingoGrids.map(checkValue(_,tirage.head)),tirage.tail)
@@ -46,6 +57,22 @@ object Day4 {
     winner._2 * winner._1.getSum
   }
 
+  @tailrec
+  def findLosingGrid(bingoGrids :List[BingoGrid], tirage:List[Int]): (BingoGrid,Int) ={
+    val checkedBingoGrids = bingoGrids.map(checkValue(_,tirage.head))
+    if (checkedBingoGrids.length == 1  && checkedBingoGrids.exists(_.isWinning)) {
+
+      (checkValue(checkedBingoGrids.head,tirage.head),tirage.head)
+    } else {
+      findLosingGrid(bingoGrids.map(checkValue(_, tirage.head)).filterNot(_.isWinning), tirage.tail)
+    }
+  }
+
+  def computeBonus(inputBingoGrids :List[String],input:List[String]):Int   = {
+
+    val winner: (BingoGrid,Int) = findLosingGrid(parser(inputBingoGrids),input.map(_.toInt))
+    winner._2 * winner._1.getSum
+  }
 
 
 
